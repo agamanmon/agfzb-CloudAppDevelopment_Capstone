@@ -27,7 +27,9 @@ DEBUG = True
 
 APPEND_SLASH = True
 
-ALLOWED_HOSTS = ["localhost"]
+ALLOWED_HOSTS = [
+    'localhost',
+    'agamanmon.apic.au-syd.mybluemix.net']
 
 
 # Application definition
