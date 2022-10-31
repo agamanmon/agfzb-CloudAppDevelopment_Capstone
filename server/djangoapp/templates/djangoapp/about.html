@@ -1,26 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    
+
+<html>
+  <head>
     <meta charset="UTF-8">
-    <title>About Us</title>
     {% load static %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
-
-</head>
-
-    <body>
-       <div class="container-fluid"><h1>Welcome to Best Cars dealership, home to the best cars in North America.</br>We sell domestic and imported cars at reasonable prices.</h1>
-        <img src="https://img.freepik.com/free-vector/used-car-market-flat-composition-editable-text-automobile-silhouettes-different-models-with-buyer-characters-illustration_1284-60942.jpg?w=1800&t=st=1653494583~exp=1653495183~hmac=87680f3f00925788f8c3d30c869853e06b2ae781da7ff956bc0ba97c0ec6ce13" alt="line-up of new cars" >
-    </div>
-          
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand text-white" href="#">Best Cars Dealership Review</a><br><br>
+            </div>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if user.is_authenticated %}
+                    <li>
+                        <a class="btn btn-info" style= "margin:5px;"href="#">{{ user.first_name }}</a>
+                        <a class="btn btn-light" style= "margin:5px;"href="{% url 'djangoapp:logout' %}">Logout</a>
+                        <a class="btn btn-light" style= "margin:5px;"href="{% url 'djangoapp:about' %}">About</a>
+                        <a class="btn btn-light" style= "margin:5px;"href="{% url 'djangoapp:contact' %}">Contact Us</a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <a class="btn btn-light" style= "margin:5px;" href="{% url 'djangoapp:about' %}">About</a>
+                                <a class="btn btn-light" style= "margin:5px;" href="{% url 'djangoapp:contact' %}">Contact Us</a>
+                                <a class="btn btn-light" style= "margin:5px;"href="{% url 'djangoapp:registration' %}">Sign Up</a>
+                                <input type="text" class="form-control" style= "margin:5px;" placeholder="Username" name="username" >
+                                <input type="password" class="form-control" style= "margin:5px;" placeholder="Password" name="password" >
+                                <button class="btn btn-info" style= "margin:5px;" type="submit">Login</button>
+                            </div>
+                        </form>
+                    </li>
+                    {% endif %}
+                </ul>
+        </div>
+    </nav>
+    <br>
+    <h1 class="text-center">About</h1>
+        <p><center> Welcome to Best Cars dealership, <br> home to the best cars in North America. <br> We sell domestic and imported cars at reasonable prices.
+        </p>
   </body>
-  
-
 </html>
