@@ -29,7 +29,7 @@ APPEND_SLASH = True
 
 ALLOWED_HOSTS = [
     'localhost',
-    'agamanmon.apic.au-syd.mybluemix.net/']
+    'agamanmon.apic.au-syd.mybluemix.net']
 
 
 # Application definition
