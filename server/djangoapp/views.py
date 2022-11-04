@@ -76,7 +76,7 @@ def registration_request(request):
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
     if request.method == "GET":
-        url = "https://us-south.functions.appdomain.cloud/api/v1/web/DreamBoat_djangoserver-space/dealership-package/dealerships"
+        url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/get-dealership"
         dealerships = get_dealers_from_cf(url)
         context = {}
         context["dealerships"] = dealerships
@@ -91,11 +91,11 @@ def get_dealerships(request):
 def get_dealer_details(request, id):
     if request.method == "GET":
         context = {}
-        url = "https://us-south.functions.appdomain.cloud/api/v1/web/DreamBoat_djangoserver-space/dealership-package/dealerships"
+        url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/get-dealership"
         dealer = get_dealer_by_id_from_cf(url, id)
         context["dealer"] = dealer
     
-        review_url = "https://us-south.functions.appdomain.cloud/api/v1/web/DreamBoat_djangoserver-space/dealership-package/get-reviews"
+        review_url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/get-review"
         reviews = get_dealer_reviews_from_cf(review_url, id=id)
         print(reviews)
         context["reviews"] = reviews
@@ -110,7 +110,7 @@ def get_dealer_details(request, id):
 def add_review(request, id):
     if request.user.is_authenticated:
         context = {}
-        dealer_url = "https://us-south.functions.appdomain.cloud/api/v1/web/DreamBoat_djangoserver-space/dealership-package/dealerships"
+        dealer_url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/get-dealership"
         dealer = get_dealer_by_id_from_cf(dealer_url, id)
         context["dealer"] = dealer
         if request.method == "GET":
@@ -135,7 +135,7 @@ def add_review(request, id):
                 review["car_make"] = car.make.name
                 review["car_model"] = car.name
                 review["car_year"] = car.year
-            post_url = "https://us-south.functions.appdomain.cloud/api/v1/web/DreamBoat_djangoserver-space/dealership-package/post-reviews"
+            post_url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/post-review"
             json_payload = { "review": review }
             post_request(post_url, json_payload, id=id)
             return redirect("djangoapp:dealer_details", id=id)

@@ -39,9 +39,45 @@
                 </ul>
         </div>
     </nav>
-    <br>
-    <h1 class="text-center">About</h1>
-        <p><center> Welcome to Best Cars dealership, <br> home to the best cars in North America. <br> We sell domestic and imported cars at reasonable prices.
-        </p>
-  </body>
-</html>
+    <div class="container-fluid">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-warning" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        
+        <main class="container"></main>
+          <table class="table" id="table" data-filter-control="true">
+            <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Dealer Name</th>
+                  <th scope="col">City</th>
+                  <th scope="col">Address</th>
+                  <th scope="col">Zip</th>
+                  <th data-field="state" data-filter-control="select">State</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dealer in dealership_list %}
+                    <tr>
+                        <td>{{dealer.id}}</td>
+                        <td><a href="{% url 'djangoapp:dealer_details' dealer.id %}">{{dealer.full_name}}</a></td>
+                        <td>{{dealer.city}}</td>
+                        <td>{{dealer.address}}</td>
+                        <td>{{dealer.zip}}</td>
+                        <td>{{dealer.st}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+        </div>
+          </body>
+          <script>
+            $(function() {
+                $('#table').bootstrapTable()
+            })
+          </script>
+      </html>
+      
+    

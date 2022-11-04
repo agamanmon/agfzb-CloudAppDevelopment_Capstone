@@ -1,11 +1,11 @@
   applications:
   - name: djangoapp
     routes:
-      - route: agamanmon0.apic.au-syd.mybluemix.net/
+      - route: agamanmon.apic.au-syd.mybluemix.net/
     memory: 128M
     buildpack: python_buildpack
   - name: djangoapp-nginx
     routes:
-      - route: agamanmon0.apic.au-syd.mybluemix.net/static
+      - route: agamanmon.apic.au-syd.mybluemix.net/static
     memory: 128M
     buildpack: staticfile_buildpack
