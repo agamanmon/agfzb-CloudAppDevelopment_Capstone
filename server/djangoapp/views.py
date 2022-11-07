@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
-#from .models import CarDealer, DealerReview, CarModel, CarMake
+from .models import CarDealer, DealerReview, CarModel, CarMake
 from .restapis import get_dealers_from_cf,get_dealer_reviews_from_cf,post_request, get_dealer_by_id_from_cf
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -79,8 +79,11 @@ def get_dealerships(request):
         url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/get-dealership"
         dealerships = get_dealers_from_cf(url)
         context = {}
-        context["dealerships"] = dealerships
+        context["dealership_list"] = dealerships
+        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
+        #return HttpResponse(dealer_names)
         return render(request, 'djangoapp/index.html', context)
+        
 
 
 # Create a `get_dealer_details` view to render the reviews of a dealer
