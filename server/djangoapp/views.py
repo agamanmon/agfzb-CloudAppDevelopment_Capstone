@@ -75,12 +75,12 @@ def registration_request(request):
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
+    context = {}
     if request.method == "GET":
         url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/get-dealership"
         dealerships = get_dealers_from_cf(url)
-        context = {}
         context["dealership_list"] = dealerships
-        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
+        #dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
         #return HttpResponse(dealer_names)
         return render(request, 'djangoapp/index.html', context)
         
@@ -95,8 +95,12 @@ def get_dealer_details(request, id):
     if request.method == "GET":
         context = {}
         url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/get-dealership"
-        dealer = get_dealer_by_id_from_cf(url, id)
-        context["dealer"] = dealer
+        dealerships = get_dealer_by_id_from_cf(url, id=id)
+        dealership = {}
+        for d in dealerships:
+            if d.id == id:
+                dealership = d
+        context["dealer"]=dealership
     
         review_url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/get-review"
         reviews = get_dealer_reviews_from_cf(review_url, id=id)

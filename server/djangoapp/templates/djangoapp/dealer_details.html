@@ -5,78 +5,50 @@
     <title>Dealership Review</title>
     {% load static %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-
 </head>
 
-<body>
-<nav class="navbar navbar-light bg-light">
-    <div class="container-fluid">
-        <div class="navbar-header">
-              <a class="navbar-brand" href="{% url 'djangoapp:about' %}">Dealerships</a>
-        </div>
-        <ul class="nav navbar-nav navbar-right">
-            {% if user.is_authenticated %}
-            <li>
-                <a class="btn btn-link" href="{% url 'djangoapp:add_review' dealer.id%}">Add Review</a>
-                <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
-                <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
-            </li>
-            {% else %}
-            <li>
-                <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
-                    {% csrf_token %}
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Username" name="username" >
-                        <input type="password" class="form-control" placeholder="Username" name="password" >
-                        <button class="btn btn-primary" type="submit">Login</button>
-                        <a class="btn btn-link" href="{% url 'djangoapp:registration' %}">Sign Up</a>
+    <body>
+
+    <!--Add a nav bar here -->
+    {% include "djangoapp/header.html" %}
+    <table class="table table-striped" id="table" data-filter-control="true" style="margin-top: 3%; margin-bottom: 3%;">
+    <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Dealer Name</th>
+                    <th scope="col">City</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Zip</th>
+                    <th data-field="state">State</th>
+                </tr>
+            </thead>
+        <tbody>
+           <tr>
+                    <td style="padding: 2%;">{{dealer.id}}</td>
+                    <td style="padding: 2%;">{{dealer.full_name}}</td>
+                    <td style="padding: 2%;">{{dealer.city}}</td>
+                    <td style="padding: 2%;">{{dealer.address}}</td>
+                    <td style="padding: 2%;">{{dealer.zip}}</td>
+                    <td style="padding: 2%;">{{dealer.st}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3> REVIEWS</h3>
+        <!-- Add reviews as cards -->
+        <main class="container" style="padding: 3%;">
+            <div class="card-columns">
+                {% for review in reviews %}
+                    <div class="card" style="height: 350px">
+                        <img src="{{MEDIA_URL}}/emoji/{{review.sentiment}}.png" class="card-img-center" style="height: 100px; width: 100px; margin-left: 35%; margin-bottom: 5%; margin-top: 2%;">
+                        <div class="card-body" style="text-align: center;">
+                            <h5 class="card-title">{{ review.car_make }}, {{ review.car_model }}</h5>
+                            <h5 class="card-title">{{ review.car_year }}</h5>
+                            <p class="card-text">{{ review.review }}</p>
+                        </div>
                     </div>
-                </form>
-            </li>
-            {% endif %}
-        </ul>
-    </div>
-</nav>
-
-<div class="container-fluid">
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-warning" role="alert">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
-
-    <h3>Reviews for <b>{{dealer.full_name}}</b></h3>
-
-    <div class="container">
-        <div class="card-columns">
-            {% for review in reviews %}
-            <div class="col-auto mb-3">
-                <div class="card">
-                    {% if review.sentiment == "positive" %}
-                        <img class="card-img-left" src="{{MEDIA_URL}}/emoji/positive.png" width="36px" height="36px"
-                             alt="Sentiment">
-                    {% elif review.sentiment == "negative" %}
-                        <img class="card-img-left" src="{{MEDIA_URL}}/emoji/negative.png" width="36px" height="36px"
-                                   alt="Sentiment">
-                        {% else %}
-                        <img class="card-img-left" src="{{MEDIA_URL}}/emoji/neutral.png" width="36px" height="36px"
-                                   alt="Sentiment">
-                    {% endif %}
-                    <div class="card-body bg-light">
-                              {% if review.car_make%}
-                                  <h5 class="card-title">{{review.car_make}}, {{review.car_model}} </h5>
-                                  <h5 class="card-title">{{review.car_year}}</h5>
-                               {% endif %}
-                              <p class="card-text">{{review.review}}</p>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
-    </div>
-</div>
-
-</body>
-
+        </main>
+    </body>
 
 </html>
