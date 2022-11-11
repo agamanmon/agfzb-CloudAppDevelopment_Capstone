@@ -116,6 +116,7 @@ def get_dealer_details(request, id):
 # def add_review(request, dealer_id):
 # ...
 
+
 def add_review(request, id):
     if request.user.is_authenticated:
         context = {}

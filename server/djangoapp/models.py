@@ -31,12 +31,29 @@ class CarModel(models.Model):
         (WAGON, 'Wagon'),
         (PICKUP, 'Pickup')
     ]
-    YEAR_CHOICES = [(r,r) for r in range(1990, datetime.date.today().year+1)]
+    #YEAR_CHOICES = [(r,r) for r in range(1990, datetime.date.today().year+1)]
+    #car_make = models.ForeignKey(CarMake, on_delete=models.CASCADE)
+    #name = models.CharField(null=False, max_length=30, default='car model')
+    #dealer_id = models.IntegerField()
+    #_type = models.CharField(null=False, max_length=30, choices=TYPE_CHOICES)
+    #year = models.DateField()
+
+    #def __str__(self):
+    #    return self.name + str(self.year.year)
+
     car_make = models.ForeignKey(CarMake, on_delete=models.CASCADE)
-    name = models.CharField(null=False, max_length=30, default='car model')
-    dealer_id = models.IntegerField()
-    _type = models.CharField(null=False, max_length=30, choices=TYPE_CHOICES)
-    year = models.DateField()
+    dealer_id = models.IntegerField(default=1)
+    _type = models.CharField(
+        null=False,
+        max_length=20,
+        choices=TYPE_CHOICES,
+        default=SEDAN
+    )  
+    name = models.CharField(max_length=200, default="model")
+    year = models.DateField(null=True)
+    
+    def __str__(self):
+        return "name: " + self.name
 
 # <HINT> Create a Car Model model `class CarModel(models.Model):`:
 # - Many-To-One relationship to Car Make model (One Car Make has many Car Models, using ForeignKey field)
@@ -53,13 +70,13 @@ class CarModel(models.Model):
 
 # <HINT> Create a plain Python class `DealerReview` to hold review data
 
-    def __str__(self):
-        return
-        "Name: " + self.name
-        "Make: " + self.car_make + \
-        "Dealer ID: " + self.dealer_id + \
-        "Type: " + self._type + \
-        "Year: " + self.year
+   # def __str__(self):
+   #     return
+   #     "Name: " + self.name
+   #     "Make: " + self.car_make + \
+   #     "Dealer ID: " + self.dealer_id + \
+   #     "Type: " + self._type + \
+   #     "Year: " + self.year
 
 class CarDealer:
 

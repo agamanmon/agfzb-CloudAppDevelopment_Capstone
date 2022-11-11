@@ -8,18 +8,15 @@ from .models import *
 # CarModelInline class
 class CarModelInline(admin.StackedInline):
     model=CarModel
-    extra=0
+    extra=2
 
 # CarModelAdmin class
 class CarModelAdmin(admin.ModelAdmin):
-    list_display=['name','dealer_id','year']
-    search_fields=['name','type']
+    list_display=['car_make']
 
 # CarMakeAdmin class with CarModelInline
 class CarMakeAdmin(admin.ModelAdmin):
     inlines=[CarModelInline]
-    list_display=['name','description']
-    search_fields=['name']
 
 
 # Register models here
