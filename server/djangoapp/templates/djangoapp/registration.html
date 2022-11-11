@@ -9,7 +9,7 @@
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand text-white" href="#">Best Cars Dealership Review</a><br><br>
+                <a class="navbar-brand text-white" href="{% url 'djangoapp:index' %}">Best Cars Dealership Review</a><br><br>
             </div>
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}
@@ -17,7 +17,7 @@
                         <a class="btn btn-info" style= "margin:5px;"href="#">{{ user.first_name }}</a>
                         <a class="btn btn-light" style= "margin:5px;"href="{% url 'djangoapp:logout' %}">Logout</a>
                         <a class="btn btn-light" style= "margin:5px;"href="{% url 'djangoapp:about' %}">About</a>
-                        <a class="btn btn-light" style= "margin:5px;"href="{% url 'djangoapp:contact' %}">Contact Us</a>
+                        <a class="btn btn-light" style= "margin:5px;"href="{% url 'djangoapp:contact/' %}">Contact Us</a>
                     </li>
                     {% else %}
                     <li>

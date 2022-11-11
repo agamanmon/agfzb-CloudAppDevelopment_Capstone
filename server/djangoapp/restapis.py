@@ -20,7 +20,7 @@ def get_request(url, **kwargs):
             params["features"] = kwargs["features"]
             params["return_analyzed_text"] = kwargs["return_analyzed_text"]
             response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
-                                    auth=HTTPBasicAuth('apikey', api_key))
+                                    auth=HTTPBasicAuth('RnK06meygWCEPkZ5aa_lN8QTO5qryuxAdI5k6zge0boX', api_key))
         else:
             # Call get method of requests library with URL and parameters
             response = requests.get(url, headers={'Content-Type': 'application/json'},
@@ -147,8 +147,8 @@ def get_dealer_reviews_from_cf(url, **kwargs):
     return results
 
 def analyze_review_sentiments(text):
-    url = "https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/089cac19-ce2a-4220-9806-169a9be726ad"
-    api_key = "wA2opsZiLa3sHYCjQ8rUIW-xWNIoff0phjBkXWMKx7cj"
+    url = "https://api.au-syd.natural-language-understanding.watson.cloud.ibm.com/instances/9a2e03a6-9e23-4314-b3d5-16c04afba8ea"
+    api_key = "RnK06meygWCEPkZ5aa_lN8QTO5qryuxAdI5k6zge0boX"
     authenticator = IAMAuthenticator(api_key)
     natural_language_understanding = NaturalLanguageUnderstandingV1(version='2022-08-01',authenticator=authenticator)
     natural_language_understanding.set_service_url(url)

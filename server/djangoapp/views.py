@@ -28,24 +28,23 @@ def contact(request):
 
 # Create a `login_request` view to handle sign in request
 def login_request(request):
-    context = {}
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('djangoapp:index.html')
+            return redirect('djangoapp:index')
         else:
-            context['message'] = "Invalid username or password."
-            return render(request, 'djangoapp/registration.html', context)
-    else:
-        return render(request, 'djangoapp/registration.html', context)
+            messages.warning(request, "Invalid username or password.")
+            return redirect('djangoapp:index')
+    
 
 # Create a `logout_request` view to handle sign out request
 def logout_request(request):
+    print("Log out the user '{}'".format(request.user.username))
     logout(request)
-    return redirect('djangoapp:index.html')
+    return redirect('djangoapp:index')
 
 # Create a `registration_request` view to handle sign up request
 def registration_request(request):
@@ -67,11 +66,14 @@ def registration_request(request):
         if not user_exist:
             user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name,
                                             password=password)
+            user.is_superuser = True
+            user.is_staff = True
+            user.save()
             login(request, user)
-            return redirect("djangoapp:index.html")
+            return redirect("djangoapp:index")
         else:
-            context['message'] = "User already exists."
-            return render(request, 'djangoapp/registration.html', context)
+            messages.warning(request, "User already exists.")
+            return redirect("djangoapp:registration")
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
