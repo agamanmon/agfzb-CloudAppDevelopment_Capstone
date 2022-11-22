@@ -82,46 +82,28 @@ def get_dealerships(request):
         url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/get-dealership"
         dealerships = get_dealers_from_cf(url)
         context["dealership_list"] = dealerships
-        #dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
-        #return HttpResponse(dealer_names)
         return render(request, 'djangoapp/index.html', context)
         
 
-
-# Create a `get_dealer_details` view to render the reviews of a dealer
-# def get_dealer_details(request, dealer_id):
-# ...
-
-
-def get_dealer_details(request, id):
+def get_dealer_details(request, dealer_id):
     if request.method == "GET":
         context = {}
-        url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/get-dealership"
-        dealerships = get_dealer_by_id_from_cf(url, id=id)
-        dealership = {}
-        for d in dealerships:
-            if d.id == id:
-                dealership = d
-        context["dealer"]=dealership
-    
-        review_url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/get-review"
-        reviews = get_dealer_reviews_from_cf(review_url, id=id)
+        url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/get-review"
+        reviews = get_dealer_reviews_from_cf(url,dealer_id)
+        
         print(reviews)
         context["reviews"] = reviews
-        
+        dealer = get_dealer_from_cf_by_id(
+            "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/get-dealership", dealer_id)
+        print(dealer)
+        context["dealer"] = dealer    
         return render(request, 'djangoapp/dealer_details.html', context)
 
-
-# Create a `add_review` view to submit a review
-# def add_review(request, dealer_id):
-# ...
-
-
-def add_review(request, id):
+def add_review(request, dealer_id):
     if request.user.is_authenticated:
         context = {}
         dealer_url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/get-dealership"
-        dealer = get_dealer_by_id_from_cf(dealer_url, id)
+        dealer = get_dealer_by_id_from_cf(dealer_url, id=dealer_id)
         context["dealer"] = dealer
         if request.method == "GET":
             cars = CarModel.objects.all()
@@ -133,7 +115,7 @@ def add_review(request, id):
             review = {}
             review["name"] = request.user.first_name + " " + request.user.last_name
             form = request.POST
-            review["dealership"] = id
+            review["dealership"] = dealer_id
             review["review"] = form["content"]
             if(form.get("purchasecheck") == "on"):
                 review["purchase"] = True
@@ -147,7 +129,7 @@ def add_review(request, id):
                 review["car_year"] = car.year
             post_url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/post-review"
             json_payload = { "review": review }
-            post_request(post_url, json_payload, id=id)
-            return redirect("djangoapp:dealer_details", id=id)
+            post_request(post_url, json_payload, dealer_id)
+            return redirect("djangoapp:dealer_details", dealer_id)
     else:
         return redirect("/djangoapp/login")

@@ -53,10 +53,8 @@ def get_dealers_from_cf(url, **kwargs):
         json_result = get_request(url)
 
     if json_result:
-        # Get the row list in JSON as dealers
         dealers=json_result
         #print("line 50 RA json result",json_result)
-        # For each dealer object
         for dealer in dealers:
             # Get its content in `doc` object
             dealer_doc = dealer["doc"]
@@ -66,12 +64,11 @@ def get_dealers_from_cf(url, **kwargs):
                                    short_name=dealer_doc["short_name"],
                                    st=dealer_doc["st"], zip=dealer_doc["zip"])
             results.append(dealer_obj)
-
     return results
 
-def get_dealer_by_id_from_cf(url, id):
+def get_dealer_by_id_from_cf(url, **kwargs):
     results = []
-    json_result = get_request(url, id=id)
+    json_result = get_request(url, **kwargs)
     if json_result:
         dealers = json_result
         for dealer_doc in dealers:
@@ -109,44 +106,45 @@ def get_dealers_by_st_from_cf(url, state):
             results.append(dealer_obj)
     return results
    
-def get_dealer_reviews_from_cf(url, **kwargs):
+def get_dealer_reviews_from_cf(url, dealer_id):
     results = []
-    id = kwargs.get("id")
-    if id:
-        json_result = get_request(url, id=id)
-    else:
-        json_result = get_request(url)
-
+    json_result = get_request(url, id=dealer_id)
+    print(json_result, "dealer_id")
     if json_result:
-        reviews = json_result["data"]["docs"]
-
+        reviews = json_result
         for review in reviews:
-            dealer_review = review
-            
-            review_obj = DealerReview(id=dealer_review["id"],
-                                   dealership=dealer_review["dealership"],
-                                   name=dealer_review["name"],
-                                   purchase=dealer_review["purchase"],
-                                   review=dealer_review["review"])
-            if "id" in dealer_review:
-                review_obj.id = dealer_review["id"]
-            if "purchase_date" in dealer_review:
-                review_obj.purchase_date = dealer_review["purchase_date"]
-            if "car_make" in dealer_review:
-                review_obj.car_make = dealer_review["car_make"]
-            if "car_model" in dealer_review:
-                review_obj.car_model = dealer_review["car_model"]
-            if "car_year" in dealer_review:
-                review_obj.car_year = dealer_review["car_year"]
-            
-            sentiment = analyze_review_sentiments(review_obj.review)
-            #print(sentiment)
-            review_obj.sentiment = sentiment
+            if review["purchase"]:
+                review_obj = DealerReview(
+                    dealership=review["id"],
+                    name=review["name"],
+                    purchase=review["purchase"],
+                    review=review["review"],
+                    purchase_date=review["purchase_date"],
+                    car_make=review["car_make"],
+                    car_model=review["car_model"],
+                    car_year=review["car_year"],
+                    sentiment=analyze_review_sentiments(review["review"]),
+                    id=review['id']
+                )
+            else:
+                review_obj = DealerReview(
+                    dealership=review["id"],
+                    name=review["name"],
+                    purchase=review["purchase"],
+                    review=review["review"],
+                    purchase_date=None,
+                    car_make=None,
+                    car_model=None,
+                    car_year=None,
+                    sentiment=analyze_review_sentiments(review["review"]),
+                    id=review['id']
+                )
             results.append(review_obj)
-
     return results
+            
 
 def analyze_review_sentiments(text):
+
     url = "https://api.au-syd.natural-language-understanding.watson.cloud.ibm.com/instances/9a2e03a6-9e23-4314-b3d5-16c04afba8ea"
     api_key = "RnK06meygWCEPkZ5aa_lN8QTO5qryuxAdI5k6zge0boX"
     authenticator = IAMAuthenticator(api_key)
