@@ -82,7 +82,7 @@ def get_dealers_from_cf(url, **kwargs):
         json_result = get_request(url)
 
     if json_result:
-        dealers=json_result["body"]["docs"]
+        dealers=json_result
         #print("line 50 RA json result",json_result)
         for dealer in dealers:
             # Get its content in `doc` object
@@ -104,7 +104,8 @@ def get_dealer_by_id_from_cf(url, id):
         #dealer_doc = dealers["docs"][0]
         for dealer_doc in dealers:
             dealer_obj = CarDealer(address=dealer_doc["address"], city=dealer_doc["city"],
-                                id=dealer_doc["id"], lat=dealer_doc["lat"], long=dealer_doc["long"], full_name=dealer_doc["full_name"],
+                                id=dealer_doc["id"], short_name=dealer_doc["short_name"], 
+                                lat=dealer_doc["lat"], long=dealer_doc["long"], full_name=dealer_doc["full_name"],
                                 st=dealer_doc["st"], zip=dealer_doc["zip"])
             #results.append(dealer_obj)
     return dealer_obj
@@ -202,7 +203,7 @@ def get_dealer_reviews_from_cf(url, **kwargs):
 def analyze_review_sentiments(text):
 
     url = "https://api.au-syd.natural-language-understanding.watson.cloud.ibm.com/instances/9a2e03a6-9e23-4314-b3d5-16c04afba8ea"
-    api_key = "lp49stUPFwONcTIBT34yA1Dtf92WNG7lziW21d2dXlG2"
+    api_key = "RnK06meygWCEPkZ5aa_lN8QTO5qryuxAdI5k6zge0boX"
     authenticator = IAMAuthenticator(api_key)
     natural_language_understanding = NaturalLanguageUnderstandingV1(version='2022-08-01',authenticator=authenticator)
     natural_language_understanding.set_service_url(url)

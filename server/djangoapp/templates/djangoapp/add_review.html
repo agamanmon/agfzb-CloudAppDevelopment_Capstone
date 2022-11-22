@@ -33,7 +33,7 @@
                                 <h5>Select your car (model-make-year):</h5><br/>
                                 <select name="car" id="car" class="form-select form-select-sm mt-0" aria-label=".form-select-sm example"><br>
                                     {% for car in cars %}       
-                                        <option selected value={{car.id}}>{{car.car_make.name}}-{{car.name}}-{{ car.year|date:"Y" }}</option>
+                                        <option selected value={{car.id}}>{{car.make.name}}-{{car.name}}-{{ car.year|date:"Y" }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
