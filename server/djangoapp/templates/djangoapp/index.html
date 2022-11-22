@@ -45,7 +45,7 @@
                             <td style="padding: 2%;">{{dealer.st}}</td>
                             {% if user.is_authenticated %}
                                 <td style="padding: 2%;">
-                                    <a href="{% url 'djangoapp:add_review' dealer.id %}">Add review</a>
+                                    <a href="{% url 'djangoapp:add_review' dealer.id  %}">Add review</a>
                                 </td>
                             {% else %}
                                 <td>
