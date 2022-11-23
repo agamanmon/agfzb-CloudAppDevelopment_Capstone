@@ -1,15 +1,3 @@
-#from operator import truediv
-#from django.shortcuts import render
-#from django.http import HttpResponseRedirect, HttpResponse
-#from django.contrib.auth.models import User
-#from django.shortcuts import get_object_or_404, render, redirect
-#from .models import CarDealer, DealerReview, CarModel, CarMake
-#from .restapis import get_dealers_from_cf,get_dealer_reviews_from_cf,post_request, get_dealer_by_id_from_cf
-#from django.contrib.auth import login, logout, authenticate
-#from django.contrib import messages
-#from datetime import datetime
-#import logging
-#import json
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
@@ -109,20 +97,6 @@ def get_dealer_details(request, id):
         
         return render(request, 'djangoapp/dealer_details.html', context)
 
-#def get_dealer_details(request, dealer_id):
-#    if request.method == "GET":
-#        context = {}
-#        url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/get-review"
-#        reviews = get_dealer_reviews_from_cf(url,dealer_id)
-        
-#        print(reviews)
-#        context["reviews"] = reviews
-#        dealer = get_dealer_from_cf_by_id(
-#            "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/get-dealership", dealer_id)
-#        print(dealer)
-#        context["dealer"] = dealer    
-#        return render(request, 'djangoapp/dealer_details.html', context)
-
 
 def add_review(request, id):
     context = {}
@@ -130,11 +104,9 @@ def add_review(request, id):
     dealer = get_dealer_by_id_from_cf(dealer_url, id=id)
     context["dealer"] = dealer
     if request.method == 'GET':
-        # Get cars for the dealer
         cars = CarModel.objects.all()
         print(cars)
-        context["cars"] = cars
-        
+        context["cars"] = cars  
         return render(request, 'djangoapp/add_review.html', context)
     elif request.method == 'POST':
         if request.user.is_authenticated:
@@ -156,44 +128,8 @@ def add_review(request, id):
             payload["car_make"] = car.make.name
             payload["car_model"] = car.name
             payload["car_year"] = int(car.year.strftime("%Y"))
-
             new_payload = {}
             new_payload["review"] = payload
             review_post_url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/post-review"
             post_request(review_post_url, new_payload, id=id)
         return redirect("djangoapp:dealer_details", id=id)
-
-#def add_review(request, dealer_id):
-#    if request.user.is_authenticated:
-#        context = {}
-#        dealer_url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/get-dealership"
-#        dealer = get_dealer_by_id_from_cf(dealer_url, id=dealer_id)
-#        context["dealer"] = dealer
-#        if request.method == "GET":
-#            cars = CarModel.objects.all()
-#            context["cars"] = cars
-#            print(context)
-#            return render(request, 'djangoapp/add_review.html', context)
-#        
-#        if request.method == "POST":
-#            review = {}
-#            review["name"] = request.user.first_name + " " + request.user.last_name
-#            form = request.POST
-#            review["dealership"] = dealer_id
-#            review["review"] = form["content"]
-#            if(form.get("purchasecheck") == "on"):
-#                review["purchase"] = True
-#            else:
-#                review["purchase"] = False
-#            if(review["purchase"]):
-#                review["purchase_date"] = datetime.strptime(form.get("purchasedate"), "%m/%d/%Y").isoformat()
-#                car = CarModel.objects.get(pk=form["car"])
-#                review["car_make"] = car.make.name
-#                review["car_model"] = car.name
-#                review["car_year"] = car.year
-#            post_url = "https://us-south.functions.appdomain.cloud/api/v1/web/agamanmon_default/dealership-package/post-review"
-#            json_payload = { "review": review }
-#            post_request(post_url, json_payload, dealer_id)
-#            return redirect("djangoapp:dealer_details", dealer_id)
-#    else:
-#        return redirect("/djangoapp/login")

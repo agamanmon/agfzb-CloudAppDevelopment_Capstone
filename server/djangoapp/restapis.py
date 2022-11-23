@@ -8,32 +8,6 @@ from ibm_watson.natural_language_understanding_v1 import Features,SentimentOptio
 import time
 
 
-#def get_request(url, **kwargs):  
-#    # If argument contain API KEY
-#    api_key = kwargs.get("api_key")
-#    print("GET from {} ".format(url))
-#    try:
-#        if api_key:
-#            params = dict()
-#            params["text"] = kwargs["text"]
-#            params["version"] = kwargs["version"]
-#            params["features"] = kwargs["features"]
-#            params["return_analyzed_text"] = kwargs["return_analyzed_text"]
-#            response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
-#                                    auth=HTTPBasicAuth('RnK06meygWCEPkZ5aa_lN8QTO5qryuxAdI5k6zge0boX', api_key))
-#        else:
-#            # Call get method of requests library with URL and parameters
-#            response = requests.get(url, headers={'Content-Type': 'application/json'},
-#                                    params=kwargs)
-#    except:
-#        # If any error occurs
-#        print("Network exception occurred")
-
-#    status_code = response.status_code
-#    print("With status {} ".format(status_code))
-#    json_data = json.loads(response.text)
-#    return json_data
-
 def get_request(url, **kwargs):
     
     # If argument contain API KEY
@@ -111,27 +85,6 @@ def get_dealer_by_id_from_cf(url, id):
     return dealer_obj
 
 
-#def get_dealer_by_id_from_cf(url, **kwargs):
-#    results = []
-#    json_result = get_request(url, **kwargs)
-#    if json_result:
-#        dealers = json_result
-#        for dealer_doc in dealers:
-#            dealer_obj = CarDealer(
-#                address=dealer_doc["address"],
-#                city=dealer_doc["city"],
-#                full_name=dealer_doc["full_name"],
-#                id=dealer_doc["id"],
-#                lat=dealer_doc["lat"],
-#                long=dealer_doc["long"],
-#                short_name=dealer_doc["short_name"],
-#                st=dealer_doc["st"],
-#                #zip=dealer_doc["zip"]
-#            )
-#            results.append(dealer_obj)
-#    return results
-   
-
 def get_dealer_reviews_from_cf(url, **kwargs):
     results = []
     id = kwargs.get("id")
@@ -165,40 +118,6 @@ def get_dealer_reviews_from_cf(url, **kwargs):
 
     return results
    
-#def get_dealer_reviews_from_cf(url, dealer_id):
-#    results = []
-#    json_result = get_request(url, dealerId=dealer_id)
-#    if json_result:
-#        reviews = json_result
-#        for review in reviews:
-#            review_obj = DealerReview(
-#                    dealership=review["id"],
-#                    name=review["name"],
-#                    purchase=review["purchase"],
-#                    review=review["review"],
-#                    purchase_date=review["purchase_date"],
-#                    car_make=review["car_make"],
-#                    car_model=review["car_model"],
-#                    car_year=review["car_year"],
-#                    sentiment=analyze_review_sentiments(review["review"]),
-#                    id=review['id']
-#                )
-#            else:
-#                review_obj = DealerReview(
-#                    dealership=review["id"],
-#                    name=review["name"],
-#                    purchase=review["purchase"],
-#                    review=review["review"],
-#                    purchase_date=None,
-#                    car_make=None,
-#                    car_model=None,
-#                    car_year=None,
-#                    sentiment=analyze_review_sentiments(review["review"]),
-#                    id=review['id']
-#                )
-#            results.append(review_obj)
-#    return results
-            
 
 def analyze_review_sentiments(text):
 
